@@ -2,9 +2,13 @@ pipeline {
     agent any
 
     stages {
-        stage('Hello') {
+        stage('Run in container') {
             steps {
-                echo 'Hello, Jenkinsfile!'
+                script {
+                    docker.image('busybox').inside('-v /run/desktop/mnt/host/d/webDev/jenkins/jenkins_output:/output') {
+                        sh 'echo "Hello from withDockerContainer" > /output/hello.txt'
+                    }
+                }
             }
         }
     }
