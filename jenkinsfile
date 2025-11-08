@@ -2,13 +2,28 @@ pipeline {
     agent agent1
 
     stages {
+        stage('Start') {
+            steps {
+                echo '🔧 Pipeline started'
+            }
+        }
+
         stage('Run in container') {
             steps {
                 script {
+                    echo '🚀 Launching busybox container...'
                     docker.image('busybox').inside('-v /run/desktop/mnt/host/d/webDev/jenkins/jenkins_output:/output') {
+                        echo '📦 Inside busybox container'
                         sh 'echo "Hello from withDockerContainer" > /output/hello.txt'
+                        echo '✅ File written to /output/hello.txt'
                     }
                 }
+            }
+        }
+
+        stage('End') {
+            steps {
+                echo '🏁 Pipeline finished'
             }
         }
     }
